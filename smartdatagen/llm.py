@@ -1,5 +1,10 @@
+import os
+from dotenv import load_dotenv
 import openai
 from openai import OpenAIError
+
+# 加载 .env 文件（本地开发时使用）
+load_dotenv()
 
 def call_llm(prompt):
 
@@ -7,10 +12,15 @@ def call_llm(prompt):
     if not prompt or not prompt.strip():
         raise ValueError("提示文本不能为空")
 
+    # 从环境变量获取 API key
+    api_key = os.environ.get("LLM_API_KEY")
+    if not api_key:
+        raise ValueError("LLM_API_KEY 环境变量未设置")
+
     try:
         # 配置 OpenAI 客户端
         client = openai.OpenAI(
-            api_key="sk-91e436026cba49baaf8d00a80aaa01d6",
+            api_key=api_key,
             base_url="https://api.deepseek.com/v1"
         )
 
