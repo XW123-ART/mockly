@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "address_id": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "street": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string",
+      "pattern": "^\\d{5}(-\\d{4})?$"
+    },
+    "country": {
+      "type": "string"
+    },
+    "is_default": {
+      "type": "boolean"
+    }
+  },
+  "required": ["address_id", "user_id", "street", "city", "state", "zip_code", "country"]
+}

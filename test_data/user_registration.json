@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 20
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 8
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 18,
+      "maximum": 100
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "other"]
+    }
+  },
+  "required": ["username", "email", "password", "age"]
+}

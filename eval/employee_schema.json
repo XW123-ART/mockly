@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "position": {
+      "type": "string",
+      "enum": ["manager", "developer", "designer", "sales", "marketing"]
+    },
+    "department": {
+      "type": "string",
+      "enum": ["engineering", "design", "sales", "marketing", "hr"]
+    },
+    "salary": {
+      "type": "number",
+      "minimum": 0
+    },
+    "hire_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "active": {
+      "type": "boolean"
+    }
+  },
+  "required": ["employee_id", "name", "email", "position", "department", "salary", "hire_date"]
+}

@@ -1,0 +1,49 @@
+[
+  {
+    "order_id": "ORD20230101",
+    "customer_id": "C000001",
+    "total_amount": 1019.98,
+    "order_date": "2023-01-01T10:30:00Z",
+    "status": "delivered",
+    "items": [
+      {
+        "product_id": "P000001",
+        "quantity": 1,
+        "unit_price": 999.99
+      },
+      {
+        "product_id": "P000002",
+        "quantity": 1,
+        "unit_price": 19.99
+      }
+    ]
+  },
+  {
+    "order_id": "ORD20230102",
+    "customer_id": "C000002",
+    "total_amount": 29.97,
+    "order_date": "2023-01-02T14:45:00Z",
+    "status": "processing",
+    "items": [
+      {
+        "product_id": "P000003",
+        "quantity": 3,
+        "unit_price": 9.99
+      }
+    ]
+  },
+  {
+    "order_id": "ORD20230103",
+    "customer_id": "C000003",
+    "total_amount": 1999.98,
+    "order_date": "2023-01-03T09:15:00Z",
+    "status": "shipped",
+    "items": [
+      {
+        "product_id": "P000001",
+        "quantity": 2,
+        "unit_price": 999.99
+      }
+    ]
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "review_id": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "product_id": {
+      "type": "integer"
+    },
+    "rating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "comment": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verified": {
+      "type": "boolean"
+    }
+  },
+  "required": ["review_id", "user_id", "product_id", "rating", "comment", "created_at"]
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "username": "johndoe",
+    "email": "john.doe@example.com",
+    "password": "Password123",
+    "age": 25,
+    "gender": "male"
+  },
+  {
+    "username": "janesmith",
+    "email": "jane.smith@example.com",
+    "password": "SecurePass456",
+    "age": 30,
+    "gender": "female"
+  },
+  {
+    "username": "alexbrown",
+    "email": "alex.brown@example.com",
+    "password": "StrongPwd789",
+    "age": 22,
+    "gender": "other"
+  }
+]

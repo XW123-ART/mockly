@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 120
+    },
+    "position": {
+      "type": "string",
+      "enum": ["Intern", "Junior", "Senior", "Manager", "CEO"]
+    },
+    "salary": {
+      "type": "number",
+      "minimum": 0
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0
+    },
+    "stock": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "pending"]
+    },
+    "order_status": {
+      "type": "string",
+      "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": ["unpaid", "paid", "refunded"]
+    },
+    "user_status": {
+      "type": "string",
+      "enum": ["active", "inactive", "disabled"]
+    },
+    "verified": {
+      "type": "boolean"
+    }
+  },
+  "required": ["id", "name", "age", "position", "salary"]
+}

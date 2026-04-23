@@ -1,0 +1,35 @@
+[
+  {
+    "device_id": "DEV-123456",
+    "name": "John's iPhone",
+    "type": "smartphone",
+    "brand": "Apple",
+    "model": "iPhone 14",
+    "serial_number": "F2LZKFJ1QNQW",
+    "status": "active",
+    "purchase_date": "2023-01-01",
+    "warranty_expiry": "2024-01-01"
+  },
+  {
+    "device_id": "DEV-123457",
+    "name": "Jane's Laptop",
+    "type": "laptop",
+    "brand": "Dell",
+    "model": "XPS 13",
+    "serial_number": "CN7X23456789",
+    "status": "active",
+    "purchase_date": "2022-06-15",
+    "warranty_expiry": "2024-06-15"
+  },
+  {
+    "device_id": "DEV-123458",
+    "name": "Conference Room Tablet",
+    "type": "tablet",
+    "brand": "Samsung",
+    "model": "Galaxy Tab S8",
+    "serial_number": "SM-T970NZKAXAA",
+    "status": "maintenance",
+    "purchase_date": "2022-01-10",
+    "warranty_expiry": "2023-01-10"
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "order_id": "ORD-123456",
+    "user_id": 1,
+    "total_amount": 199.99,
+    "status": "pending",
+    "created_at": "2023-01-01T10:00:00Z",
+    "shipping_address": "123 Main St, New York, NY 10001",
+    "payment_method": "credit_card"
+  },
+  {
+    "order_id": "ORD-123457",
+    "user_id": 2,
+    "total_amount": 49.99,
+    "status": "delivered",
+    "created_at": "2023-01-02T14:30:00Z",
+    "shipping_address": "456 Oak Ave, Los Angeles, CA 90001",
+    "payment_method": "paypal"
+  },
+  {
+    "order_id": "ORD-123458",
+    "user_id": 3,
+    "total_amount": 79.99,
+    "status": "cancelled",
+    "created_at": "2023-01-03T09:15:00Z",
+    "shipping_address": "789 Pine Rd, Chicago, IL 60601",
+    "payment_method": "bank_transfer"
+  }
+]

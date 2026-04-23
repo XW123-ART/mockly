@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockly - 智能测试数据生成</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            cursor: none;
+        }
+
+        /* 背景水印 */
+        .watermark-container {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .watermark-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            transform: rotate(-12deg);
+            align-content: flex-start;
+        }
+
+        .watermark-upper { z-index: 2; }
+        .watermark-upper .watermark-text { color: #ddd; }
+        .watermark-lower { z-index: 1; margin-left: 30px; margin-top: 20px; }
+        .watermark-lower .watermark-text { color: #999; }
+
+        .watermark-text {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 6px;
+            padding: 35px 50px;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* 主内容 */
+        .main-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* Canvas 文字层 */
+        #textCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        /* 副标题 - 左下角 */
+        .subtitle {
+            position: fixed;
+            left: 40px;
+            bottom: 40px;
+            font-size: 12px;
+            color: #000;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            z-index: 20;
+        }
+
+        /* 按钮 - 底部中央 */
+        .enter-btn {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 18px 52px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .enter-btn:hover {
+            background: #333;
+            transform: translateX(-50%) scale(1.08);
+            cursor: pointer !important;
+        }
+
+        /* 装饰 */
+        .decor-line {
+            position: absolute;
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent, #bbb, transparent);
+            z-index: 5;
+        }
+        .decor-line.left { left: 12%; top: 50%; transform: translateY(-50%); }
+        .decor-line.right { right: 12%; top: 50%; transform: translateY(-50%); }
+
+        .corner-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #bbb;
+            border-radius: 50%;
+            z-index: 5;
+        }
+        .corner-dot.tl { top: 18%; left: 8%; }
+        .corner-dot.tr { top: 18%; right: 8%; }
+        .corner-dot.bl { bottom: 18%; left: 8%; }
+        .corner-dot.br { bottom: 18%; right: 8%; }
+
+        @media (max-width: 768px) {
+            .watermark-text { font-size: 14px; padding: 25px 35px; }
+            .enter-btn { padding: 16px 40px; font-size: 14px; bottom: 40px; }
+            .subtitle { left: 20px; bottom: 20px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景水印 -->
+    <div class="watermark-container">
+        <div class="watermark-layer watermark-lower" id="watermarkLower"></div>
+        <div class="watermark-layer watermark-upper" id="watermarkUpper"></div>
+    </div>
+
+    <!-- 装饰 -->
+    <div class="decor-line left"></div>
+    <div class="decor-line right"></div>
+    <div class="corner-dot tl"></div>
+    <div class="corner-dot tr"></div>
+    <div class="corner-dot bl"></div>
+    <div class="corner-dot br"></div>
+
+    <!-- Canvas 文字层 -->
+    <canvas id="textCanvas"></canvas>
+
+    <!-- 副标题和按钮 -->
+    <div class="main-content">
+        <div class="subtitle">智能测试数据生成工具</div>
+        <a href="/generator" class="enter-btn" id="enterBtn">进入工具</a>
+    </div>
+
+    <script>
+        // 生成水印
+        function generateWatermarks() {
+            const lower = document.getElementById('watermarkLower');
+            const upper = document.getElementById('watermarkUpper');
+            const text = 'Mockly';
+            const count = 300;
+
+            for (let i = 0; i < count; i++) {
+                const span1 = document.createElement('span');
+                span1.className = 'watermark-text';
+                span1.textContent = text;
+                lower.appendChild(span1);
+
+                const span2 = document.createElement('span');
+                span2.className = 'watermark-text';
+                span2.textContent = text;
+                upper.appendChild(span2);
+            }
+        }
+        generateWatermarks();
+
+        // Canvas 设置
+        const canvas = document.getElementById('textCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 鼠标状态
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let currentX = mouseX;
+        let currentY = mouseY;
+        let lastX = mouseX;
+        let lastY = mouseY;
+
+        let velocityX = 0, velocityY = 0;
+        let smoothedVelocityX = 0, smoothedVelocityY = 0;
+        let scaleX = 1, scaleY = 1, rotation = 0;
+
+        const ease = 0.08;
+        const velocityEase = 0.15;
+        const deformEase = 0.12;
+        const maxStretch = 2.2;
+        const minSpeedForDeform = 3;
+        const baseRadius = 90;
+
+        // 文字内容
+        const chineseText = '你好，我是 Mockly';
+        const englishText = "HELLO, I'M MOCKLY";
+
+        // 设置 Canvas 尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * window.devicePixelRatio;
+            canvas.height = window.innerHeight * window.devicePixelRatio;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 鼠标事件
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouseX = e.touches[0].clientX;
+                mouseY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        // 获取按钮位置
+        const enterBtn = document.getElementById('enterBtn');
+        let btnRect = enterBtn.getBoundingClientRect();
+
+        // 监听按钮悬停
+        let isHoveringBtn = false;
+        enterBtn.addEventListener('mouseenter', () => {
+            isHoveringBtn = true;
+            baseRadius = 125;
+        });
+        enterBtn.addEventListener('mouseleave', () => {
+            isHoveringBtn = false;
+            baseRadius = 90;
+        });
+
+        // 窗口大小改变时更新按钮位置
+        window.addEventListener('resize', () => {
+            btnRect = enterBtn.getBoundingClientRect();
+        });
+
+        // 检测点是否在按钮区域内
+        function isPointInButton(x, y) {
+            const padding = 20; // 额外边距
+            return x >= btnRect.left - padding &&
+                   x <= btnRect.right + padding &&
+                   y >= btnRect.top - padding &&
+                   y <= btnRect.bottom + padding;
+        }
+
+        // 绘制函数
+        function draw() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 计算速度和形变
+            const dx = mouseX - lastX;
+            const dy = mouseY - lastY;
+            velocityX = dx;
+            velocityY = dy;
+            lastX = mouseX;
+            lastY = mouseY;
+
+            smoothedVelocityX += (velocityX - smoothedVelocityX) * velocityEase;
+            smoothedVelocityY += (velocityY - smoothedVelocityY) * velocityEase;
+
+            const speed = Math.sqrt(smoothedVelocityX ** 2 + smoothedVelocityY ** 2);
+
+            currentX += (mouseX - currentX) * ease;
+            currentY += (mouseY - currentY) * ease;
+
+            let targetScaleX = 1, targetScaleY = 1, targetRotation = 0;
+
+            if (speed > minSpeedForDeform) {
+                const angle = Math.atan2(smoothedVelocityY, smoothedVelocityX);
+                targetRotation = angle;
+                const stretchIntensity = Math.min((speed - minSpeedForDeform) * 0.025, maxStretch - 1);
+                targetScaleX = 1 + stretchIntensity;
+                targetScaleY = Math.max(0.6, 1 - stretchIntensity * 0.4);
+            }
+
+            scaleX += (targetScaleX - scaleX) * deformEase;
+            scaleY += (targetScaleY - scaleY) * deformEase;
+            rotation += (targetRotation - rotation) * deformEase;
+
+            // 计算当前半径（考虑拉伸）
+            const currentRadius = baseRadius * Math.sqrt(scaleX * scaleY);
+
+            // 检测是否在按钮区域
+            const hoveringButton = isPointInButton(currentX, currentY);
+
+            // 如果在按钮区域，恢复正常鼠标并隐藏遮罩
+            if (hoveringButton) {
+                // 恢复鼠标样式
+                document.body.style.cursor = 'pointer';
+
+                // 只绘制完整中文
+                ctx.font = `bold ${Math.min(width * 0.07, 100)}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#000';
+                ctx.fillText(chineseText, centerX, centerY);
+
+                // 不绘制任何圆形遮罩或边框
+            } else {
+                // 隐藏鼠标样式
+                document.body.style.cursor = 'none';
+                // 保存上下文
+                ctx.save();
+
+                // 绘制中文（黑色）- 圆形区域外
+                ctx.font = `bold ${Math.min(width * 0.07, 100)}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#000';
+
+                // 使用 clip 创建遮罩
+                ctx.beginPath();
+                // 绘制整个屏幕
+                ctx.rect(0, 0, width, height);
+                // 减去圆形区域（使用 even-odd 规则）
+                ctx.ellipse(currentX, currentY, currentRadius * scaleX, currentRadius * scaleY, rotation, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip('evenodd');
+
+                // 绘制中文
+                ctx.fillText(chineseText, centerX, centerY);
+
+                ctx.restore();
+
+                // 绘制英文（白色）- 圆形区域内
+                ctx.save();
+
+                // 创建圆形 clip
+                ctx.beginPath();
+                ctx.ellipse(currentX, currentY, currentRadius * scaleX, currentRadius * scaleY, rotation, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+
+                // 填充深色背景
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fill();
+
+                // 绘制英文
+                ctx.font = `bold ${Math.min(width * 0.07, 100)}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#fff';
+                ctx.fillText(englishText, centerX, centerY);
+
+                ctx.restore();
+
+                // 绘制黑色圆形边框
+                ctx.save();
+                ctx.beginPath();
+                ctx.ellipse(currentX, currentY, currentRadius * scaleX, currentRadius * scaleY, rotation, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+
+        // 页面加载动画
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.6s ease';
+            requestAnimationFrame(() => document.body.style.opacity = '1');
+        });
+    </script>
+</body>
+</html>

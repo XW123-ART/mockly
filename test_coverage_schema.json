@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "age": {"type": "integer", "minimum": 0, "maximum": 120},
+    "name": {"type": "string", "minLength": 2, "maxLength": 50},
+    "status": {"type": "string", "enum": ["active", "inactive", "pending"]},
+    "role": {"type": "string", "enum": ["admin", "user", "guest"]}
+  },
+  "required": ["id", "name", "age", "status"]
+}

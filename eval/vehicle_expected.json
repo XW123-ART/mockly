@@ -1,0 +1,32 @@
+[
+  {
+    "vehicle_id": 1,
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2022,
+    "color": "Silver",
+    "vin": "1HGCM82633A004352",
+    "mileage": 15000,
+    "status": "available"
+  },
+  {
+    "vehicle_id": 2,
+    "make": "Honda",
+    "model": "Accord",
+    "year": 2021,
+    "color": "Black",
+    "vin": "1HGCR2F36FA001234",
+    "mileage": 25000,
+    "status": "sold"
+  },
+  {
+    "vehicle_id": 3,
+    "make": "Ford",
+    "model": "F-150",
+    "year": 2020,
+    "color": "Blue",
+    "vin": "1FTEW1EP1LKD45678",
+    "mileage": 45000,
+    "status": "maintenance"
+  }
+]

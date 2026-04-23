@@ -1,0 +1,2 @@
+INSERT INTO test_table (age, email, id, name, status) VALUES (28, 'zhang.ming@outlook.com', 42, '张明', 'active');
+INSERT INTO test_table (age, email, id, name, status) VALUES (32, 'zhang.ming@outlook.com', 28, '张明', 'active');

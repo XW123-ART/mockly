@@ -1,0 +1,32 @@
+[
+  {
+    "address_id": 1,
+    "user_id": 1,
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip_code": "10001",
+    "country": "United States",
+    "is_default": true
+  },
+  {
+    "address_id": 2,
+    "user_id": 1,
+    "street": "456 Oak Ave",
+    "city": "Los Angeles",
+    "state": "CA",
+    "zip_code": "90001-1234",
+    "country": "United States",
+    "is_default": false
+  },
+  {
+    "address_id": 3,
+    "user_id": 2,
+    "street": "789 Pine Rd",
+    "city": "Chicago",
+    "state": "IL",
+    "zip_code": "60601",
+    "country": "United States",
+    "is_default": true
+  }
+]

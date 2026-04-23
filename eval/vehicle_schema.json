@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "vehicle_id": {
+      "type": "integer"
+    },
+    "make": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1900,
+      "maximum": 2026
+    },
+    "color": {
+      "type": "string"
+    },
+    "vin": {
+      "type": "string",
+      "pattern": "^[A-HJ-NPR-Z0-9]{17}$"
+    },
+    "mileage": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": ["available", "sold", "maintenance"]
+    }
+  },
+  "required": ["vehicle_id", "make", "model", "year", "vin", "status"]
+}

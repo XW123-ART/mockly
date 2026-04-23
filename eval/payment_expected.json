@@ -1,0 +1,32 @@
+[
+  {
+    "payment_id": "PAY-12345678",
+    "order_id": "ORD-123456",
+    "user_id": 1,
+    "amount": 199.99,
+    "method": "credit_card",
+    "status": "completed",
+    "transaction_id": "TXN-9876543210",
+    "created_at": "2023-01-01T10:05:00Z"
+  },
+  {
+    "payment_id": "PAY-12345679",
+    "order_id": "ORD-123457",
+    "user_id": 2,
+    "amount": 49.99,
+    "method": "paypal",
+    "status": "completed",
+    "transaction_id": "TXN-9876543211",
+    "created_at": "2023-01-02T14:35:00Z"
+  },
+  {
+    "payment_id": "PAY-12345680",
+    "order_id": "ORD-123458",
+    "user_id": 3,
+    "amount": 79.99,
+    "method": "bank_transfer",
+    "status": "failed",
+    "transaction_id": "TXN-9876543212",
+    "created_at": "2023-01-03T09:20:00Z"
+  }
+]

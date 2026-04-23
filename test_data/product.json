@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "pattern": "^P\\d{6}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0.01
+    },
+    "category": {
+      "type": "string",
+      "enum": ["electronics", "clothing", "food", "books", "home"]
+    },
+    "stock": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    }
+  },
+  "required": ["product_id", "name", "price", "category", "stock"]
+}

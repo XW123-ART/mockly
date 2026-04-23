@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "student_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 30
+    },
+    "grade": {
+      "type": "string",
+      "enum": ["elementary", "middle", "high", "college"]
+    },
+    "major": {
+      "type": "string"
+    },
+    "gpa": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 4.0
+    },
+    "enrollment_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": ["student_id", "name", "email", "age", "grade", "enrollment_date"]
+}

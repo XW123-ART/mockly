@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "payment_id": {
+      "type": "string",
+      "pattern": "^PAY-\\d{8}$"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "amount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "method": {
+      "type": "string",
+      "enum": ["credit_card", "paypal", "bank_transfer", "cash_on_delivery"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "completed", "failed", "refunded"]
+    },
+    "transaction_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["payment_id", "order_id", "user_id", "amount", "method", "status", "created_at"]
+}

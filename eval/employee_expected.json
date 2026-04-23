@@ -1,0 +1,32 @@
+[
+  {
+    "employee_id": 1,
+    "name": "John Manager",
+    "email": "john.manager@company.com",
+    "position": "manager",
+    "department": "engineering",
+    "salary": 120000.00,
+    "hire_date": "2020-01-01",
+    "active": true
+  },
+  {
+    "employee_id": 2,
+    "name": "Jane Developer",
+    "email": "jane.developer@company.com",
+    "position": "developer",
+    "department": "engineering",
+    "salary": 90000.00,
+    "hire_date": "2021-03-15",
+    "active": true
+  },
+  {
+    "employee_id": 3,
+    "name": "Bob Designer",
+    "email": "bob.designer@company.com",
+    "position": "designer",
+    "department": "design",
+    "salary": 80000.00,
+    "hire_date": "2022-06-10",
+    "active": true
+  }
+]

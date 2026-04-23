@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "pattern": "^ORD-\\d{6}$"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "total_amount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "shipping_address": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": ["credit_card", "paypal", "bank_transfer", "cash_on_delivery"]
+    }
+  },
+  "required": ["order_id", "user_id", "total_amount", "status", "created_at"]
+}

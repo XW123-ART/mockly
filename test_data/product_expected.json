@@ -1,0 +1,26 @@
+[
+  {
+    "product_id": "P000001",
+    "name": "iPhone 15 Pro",
+    "price": 999.99,
+    "category": "electronics",
+    "stock": 50,
+    "description": "Latest Apple smartphone with A17 Pro chip"
+  },
+  {
+    "product_id": "P000002",
+    "name": "Cotton T-Shirt",
+    "price": 19.99,
+    "category": "clothing",
+    "stock": 200,
+    "description": "Comfortable cotton t-shirt in various colors"
+  },
+  {
+    "product_id": "P000003",
+    "name": "Organic Apple",
+    "price": 2.99,
+    "category": "food",
+    "stock": 1000,
+    "description": "Fresh organic apples from local farm"
+  }
+]

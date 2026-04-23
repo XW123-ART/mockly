@@ -1,0 +1,32 @@
+[
+  {
+    "student_id": 1,
+    "name": "Alice Smith",
+    "email": "alice.smith@example.com",
+    "age": 18,
+    "grade": "college",
+    "major": "Computer Science",
+    "gpa": 3.8,
+    "enrollment_date": "2022-09-01"
+  },
+  {
+    "student_id": 2,
+    "name": "Bob Johnson",
+    "email": "bob.johnson@example.com",
+    "age": 16,
+    "grade": "high",
+    "major": null,
+    "gpa": 3.5,
+    "enrollment_date": "2021-09-01"
+  },
+  {
+    "student_id": 3,
+    "name": "Charlie Brown",
+    "email": "charlie.brown@example.com",
+    "age": 12,
+    "grade": "middle",
+    "major": null,
+    "gpa": 3.2,
+    "enrollment_date": "2023-09-01"
+  }
+]

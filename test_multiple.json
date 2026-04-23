@@ -1,0 +1,23 @@
+[
+  {
+    "id": 42,
+    "name": "张明",
+    "email": "zhang.ming@example.com",
+    "age": 28,
+    "status": "active"
+  },
+  {
+    "id": 42,
+    "name": "张明",
+    "email": "zhang.ming@outlook.com",
+    "age": 28,
+    "status": "active"
+  },
+  {
+    "id": 28,
+    "name": "张明",
+    "email": "zhang.ming@outlook.com",
+    "age": 32,
+    "status": "active"
+  }
+]

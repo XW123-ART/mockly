@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockly - 数据生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #1a1a1a;
+        }
+
+        /* 背景水印 */
+        .watermark-container {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .watermark-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            transform: rotate(-12deg);
+            align-content: flex-start;
+        }
+
+        .watermark-upper { z-index: 2; }
+        .watermark-upper .watermark-text { color: #ddd; }
+        .watermark-lower { z-index: 1; margin-left: 30px; margin-top: 20px; }
+        .watermark-lower .watermark-text { color: #bbb; }
+
+        .watermark-text {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 6px;
+            padding: 30px 45px;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* 返回按钮 */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #000;
+        }
+
+        /* 顶部栏 - 用户信息和退出 */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        /* 标题 */
+        h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+
+        /* 表单 */
+        form {
+            background: #fff;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+            padding-bottom: 35px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            letter-spacing: 0.02em;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* 输入框 */
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 0;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        input[type="number"] {
+            width: 120px;
+        }
+
+        input[type="file"] {
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        select {
+            width: 200px;
+            cursor: pointer;
+        }
+
+        /* 复选框和单选框 */
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        label:has(input[type="checkbox"]) {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        /* 隐藏区域 */
+        .hidden-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f8f8;
+        }
+
+        .hidden-section.active {
+            display: block;
+        }
+
+        /* 提交按钮 */
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 16px 32px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            background: #333;
+        }
+
+        /* 结果区域 */
+        .result-section {
+            margin-top: 30px;
+        }
+
+        .error,
+        .success {
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c00;
+            border-left: 3px solid #c00;
+        }
+
+        .success {
+            background: #efe;
+            color: #080;
+            border-left: 3px solid #080;
+        }
+
+        .result-box {
+            background: #fff;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .result-box h2 {
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 20px;
+            font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 24px;
+            background: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .download-link:hover {
+            background: #333;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 12px;
+            color: #999;
+            letter-spacing: 0.05em;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            form {
+                padding: 25px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景水印 -->
+    <div class="watermark-container">
+        <div class="watermark-layer watermark-lower" id="watermarkLower"></div>
+        <div class="watermark-layer watermark-upper" id="watermarkUpper"></div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <div class="header-bar">
+            <a href="/" class="back-link">← 返回首页</a>
+            <div class="user-info">
+                <span class="user-name">当前用户: {{ session.user }}</span>
+                <a href="/logout" class="logout-btn">退出</a>
+            </div>
+        </div>
+
+        <h1>Mockly 数据生成器</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <!-- 数据来源选择 -->
+            <div class="form-section">
+                <h2>数据来源</h2>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="source" value="inline" {% if source_value == 'inline' or not source_value %}checked{% endif %}>
+                        直接输入 Schema
+                    </label>
+                    <label>
+                        <input type="radio" name="source" value="file" {% if source_value == 'file' %}checked{% endif %}>
+                        上传 Schema 文件
+                    </label>
+                    <label>
+                        <input type="radio" name="source" value="openapi" {% if source_value == 'openapi' %}checked{% endif %}>
+                        上传 OpenAPI 文档
+                    </label>
+                </div>
+
+                <!-- 直接输入 Schema -->
+                <div id="inline-schema" class="hidden-section {% if source_value == 'inline' or not source_value %}active{% endif %}">
+                    <label for="schema">JSON Schema:</label>
+                    <textarea id="schema" name="schema">{{ schema or '{
+  "type": "object",
+  "properties": {
+    "id": {"type": "integer", "minimum": 1},
+    "name": {"type": "string"},
+    "age": {"type": "integer", "minimum": 0, "maximum": 120},
+    "email": {"type": "string"}
+  },
+  "required": ["name", "email"]
+}' }}</textarea>
+                </div>
+
+                <!-- 上传 Schema 文件 -->
+                <div id="file-schema" class="hidden-section {% if source_value == 'file' %}active{% endif %}">
+                    <label for="schema-file">Schema 文件:</label>
+                    <input type="file" id="schema-file" name="schema-file" accept=".json">
+                </div>
+
+                <!-- 上传 OpenAPI 文档 -->
+                <div id="openapi-file" class="hidden-section {% if source_value == 'openapi' %}active{% endif %}">
+                    <label for="openapi-file">OpenAPI 文档:</label>
+                    <input type="file" id="openapi-file" name="openapi-file" accept=".json,.yaml,.yml">
+                </div>
+            </div>
+
+            <!-- 生成选项 -->
+            <div class="form-section">
+                <h2>生成选项</h2>
+
+                <label for="count">生成数量:</label>
+                <input type="number" id="count" name="count" min="1" max="100" value="{{ count or 1 }}">
+
+                <label>
+                    <input type="checkbox" name="smart" {% if smart %}checked{% endif %}>
+                    启用智能覆盖模式
+                </label>
+
+                <label>
+                    <input type="checkbox" name="mutate" {% if mutate %}checked{% endif %}>
+                    生成变异数据
+                </label>
+
+                <label>
+                    <input type="checkbox" name="report" {% if report %}checked{% endif %}>
+                    生成覆盖率报告
+                </label>
+            </div>
+
+            <!-- 输出选项 -->
+            <div class="form-section">
+                <h2>输出选项</h2>
+
+                <label for="format">输出格式:</label>
+                <select id="format" name="format">
+                    <option value="json" {% if format == 'json' or not format %}selected{% endif %}>JSON</option>
+                    <option value="csv" {% if format == 'csv' %}selected{% endif %}>CSV</option>
+                    <option value="sql" {% if format == 'sql' %}selected{% endif %}>SQL</option>
+                </select>
+
+                <label for="table">SQL 表名:</label>
+                <input type="text" id="table" name="table" value="{{ table or 'test_table' }}">
+
+                <label>
+                    <input type="checkbox" name="download" {% if download %}checked{% endif %}>
+                    下载生成的数据
+                </label>
+            </div>
+
+            <button type="submit">生成数据</button>
+        </form>
+
+        <!-- 结果区域 -->
+        <div class="result-section">
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+
+            {% if success %}
+            <div class="success">{{ success }}</div>
+            {% endif %}
+
+            {% if results %}
+            <div class="result-box">
+                <h2>生成结果:</h2>
+                <pre>{{ results }}</pre>
+                {% if download_link %}
+                <a href="{{ download_link }}" class="download-link">下载文件</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if coverage_report %}
+            <div class="result-box">
+                <h2>覆盖率报告:</h2>
+                <pre>{{ coverage_report }}</pre>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">Mockly - 智能测试数据生成工具</div>
+    </div>
+
+    <script>
+        // 生成水印
+        function generateWatermarks() {
+            const lower = document.getElementById('watermarkLower');
+            const upper = document.getElementById('watermarkUpper');
+            const text = 'Mockly';
+            const count = 300;
+
+            for (let i = 0; i < count; i++) {
+                const span1 = document.createElement('span');
+                span1.className = 'watermark-text';
+                span1.textContent = text;
+                lower.appendChild(span1);
+
+                const span2 = document.createElement('span');
+                span2.className = 'watermark-text';
+                span2.textContent = text;
+                upper.appendChild(span2);
+            }
+        }
+        generateWatermarks();
+
+        // 切换数据来源选项
+        document.querySelectorAll('input[name="source"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const value = this.value;
+                document.getElementById('inline-schema').classList.toggle('active', value === 'inline');
+                document.getElementById('file-schema').classList.toggle('active', value === 'file');
+                document.getElementById('openapi-file').classList.toggle('active', value === 'openapi');
+            });
+        });
+    </script>
+</body>
+</html>
